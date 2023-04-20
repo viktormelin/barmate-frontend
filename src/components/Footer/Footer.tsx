@@ -1,14 +1,20 @@
 import { Box, Text, TextInput } from '@mantine/core';
 import Link from 'next/link';
 
-const Footer = () => {
+interface Props {
+  absolute?: boolean;
+}
+
+const Footer: React.FC<Props> = ({ absolute }) => {
   return (
     <Box
       component='footer'
       sx={(theme) => ({
+        position: absolute ? 'absolute' : 'relative',
+        bottom: 0,
         marginTop: '2rem',
         padding: '2rem 0',
-        height: '100%',
+        maxWidth: '1024px',
         width: '100%',
         borderTop: `1px solid ${theme.colors.gray[5]}`,
         color: theme.colors.gray[9],
