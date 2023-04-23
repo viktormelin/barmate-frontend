@@ -1,14 +1,17 @@
-import { Box, Text } from '@mantine/core';
+import { ActionIcon, Box, Text, Tooltip } from '@mantine/core';
 import GridBoxLarge from './GridBoxLarge';
 import GridBoxSmallLayout from './GridBoxSmallLayout';
-import { Grid } from '@/types/typings';
+import { Box as IBox, Grid } from '@/types/typings';
+import { IconRotate, IconTrash } from '@tabler/icons-react';
 
 interface Props {
+  editMode?: boolean;
   reverse?: boolean;
-  content: Grid;
+  content?: Grid;
+  onClick?: (content: IBox | string) => void;
 }
 
-const GridLayout: React.FC<Props> = ({ reverse, content }) => {
+const GridLayout: React.FC<Props> = ({ onClick, editMode, reverse, content }) => {
   return (
     <Box
       sx={(theme) => ({
@@ -18,15 +21,39 @@ const GridLayout: React.FC<Props> = ({ reverse, content }) => {
         gap: '1rem',
       })}
     >
+      {editMode ? (
+        <Box
+          sx={(theme) => ({
+            height: 'fit-content',
+            backgroundColor: theme.colors.gray[3],
+            borderRadius: '0.25rem',
+            padding: '0.5rem',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '1rem',
+          })}
+        >
+          <Tooltip label='Reverse row'>
+            <ActionIcon color='orange'>
+              <IconRotate />
+            </ActionIcon>
+          </Tooltip>
+          <Tooltip label='Remove row'>
+            <ActionIcon color='orange'>
+              <IconTrash />
+            </ActionIcon>
+          </Tooltip>
+        </Box>
+      ) : null}
       {reverse ? (
         <>
-          <GridBoxSmallLayout content={content.small} />
-          <GridBoxLarge content={content.big} />
+          <GridBoxSmallLayout content={content?.small} onClick={onClick} />
+          <GridBoxLarge content={content?.big} editMode onClick={onClick} />
         </>
       ) : (
         <>
-          <GridBoxLarge content={content.big} />
-          <GridBoxSmallLayout content={content.small} />
+          <GridBoxLarge content={content?.big} editMode onClick={onClick} />
+          <GridBoxSmallLayout content={content?.small} onClick={onClick} />
         </>
       )}
     </Box>
